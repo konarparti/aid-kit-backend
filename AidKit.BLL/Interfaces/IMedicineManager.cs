@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using AidKit.BLL.DTO.Medicine;
+
+namespace AidKit.BLL.Interfaces
+{
+    public interface IMedicineManager
+    {
+        Task<IEnumerable<MedicineDTO>> GetAllAsync();
+
+        Task<IEnumerable<MedicineDTO>> GetAllByUserIdAsync(int id);
+    }
+}

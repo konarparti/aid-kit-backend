@@ -3,6 +3,7 @@ using System;
 using AidKit.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AidKit.DAL.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230703185116_UpdateContext")]
+    partial class UpdateContext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,16 +62,11 @@ namespace AidKit.DAL.Migrations
                     b.Property<DateTimeOffset?>("Updated")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PainKindId");
 
                     b.HasIndex("TypeMedicineId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Medicines");
                 });
@@ -171,11 +169,11 @@ namespace AidKit.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTimeOffset(new DateTime(2023, 7, 3, 19, 34, 59, 988, DateTimeKind.Unspecified).AddTicks(1259), new TimeSpan(0, 0, 0, 0, 0)),
+                            Created = new DateTimeOffset(new DateTime(2023, 7, 3, 18, 51, 15, 774, DateTimeKind.Unspecified).AddTicks(7568), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "Admin@mail.ru",
                             FullName = "Администратор",
                             Login = "Admin",
-                            Password = "$2a$11$sDHRy9g3rwMw0ASrUm1WN.cyyrxr0MU9SxG302M1DVaiKnEkJ2Roy",
+                            Password = "$2a$11$h2Ko6hMauG7WKQ6HA6u4iuTKj5TXZ/4VaCwtG5/dnPf9S/Sbxg8BO",
                             ProfileImage = "",
                             Status = 1,
                             UserRoleId = 1
@@ -183,11 +181,11 @@ namespace AidKit.DAL.Migrations
                         new
                         {
                             Id = 2,
-                            Created = new DateTimeOffset(new DateTime(2023, 7, 3, 19, 35, 0, 197, DateTimeKind.Unspecified).AddTicks(99), new TimeSpan(0, 0, 0, 0, 0)),
+                            Created = new DateTimeOffset(new DateTime(2023, 7, 3, 18, 51, 16, 69, DateTimeKind.Unspecified).AddTicks(6317), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "User@mail.ru",
                             FullName = "Пользователь",
                             Login = "User",
-                            Password = "$2a$11$JqTF0v6RmTQyCieumcpmE.XW7RDsLO3eadMzunnTZCcBj2R.E4EVm",
+                            Password = "$2a$11$F9zAlvE6PcgKz5PMtbWZEOTAmSMqppJXxVpB4GPT14KA1d0njBw2G",
                             ProfileImage = "",
                             Status = 1,
                             UserRoleId = 2
@@ -245,17 +243,9 @@ namespace AidKit.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AidKit.DAL.Entities.User", "User")
-                        .WithMany("Medicines")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("PainKind");
 
                     b.Navigation("TypeMedicine");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AidKit.DAL.Entities.User", b =>
@@ -275,11 +265,6 @@ namespace AidKit.DAL.Migrations
                 });
 
             modelBuilder.Entity("AidKit.DAL.Entities.TypeMedicine", b =>
-                {
-                    b.Navigation("Medicines");
-                });
-
-            modelBuilder.Entity("AidKit.DAL.Entities.User", b =>
                 {
                     b.Navigation("Medicines");
                 });

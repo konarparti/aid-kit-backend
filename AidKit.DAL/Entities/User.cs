@@ -20,6 +20,7 @@ namespace AidKit.DAL.Entities
         public int UserRoleId { get; set; }
         public UserRole UserRole { get; set; }
 
+        public IEnumerable<Medicine> Medicines { get; set; }
 
         #endregion
     }

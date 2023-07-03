@@ -41,7 +41,7 @@ namespace AidKit.BLL.Implementions
             {
                 Id = user.Id,
                 Login = user.Login,
-                UserRoleId = user.UserRoleId,
+                UserRoleId = (Core.Enums.UserRole)user.UserRoleId,
                 Created = user.Created,
             };
 

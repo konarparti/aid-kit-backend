@@ -48,6 +48,7 @@ namespace AidKit.WebApi.Extensions
         public static void ConfigureManagers(this IServiceCollection services)
         {
             services.AddScoped<IUserManager, UserManager>();
+            services.AddScoped<IMedicineManager, MedicineManager>();
         }
     }
 }

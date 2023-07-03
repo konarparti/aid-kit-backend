@@ -20,6 +20,9 @@ namespace AidKit.DAL
 
         public DbSet<User> Users { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<Medicine> Medicines { get; set; }
+        public DbSet<TypeMedicine> TypeMedicines { get; set; }
+        public DbSet<PainKind> PainKinds { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

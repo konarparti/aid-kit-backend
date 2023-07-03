@@ -4,27 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AidKit.DAL.Entities
+namespace AidKit.BLL.DTO.Medicine
 {
-    public class Medicine : BaseEntity
+    public class MedicineDTO
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string PathImage { get; set; }
         public DateTimeOffset Expired { get; set; }
         public int Amount { get; set; }
         public bool Available { get; set; }
 
-        #region Навигационные свойства
-
-        public int TypeMedicineId { get; set; }
-        public TypeMedicine TypeMedicine { get; set; }
-
-        public int PainKindId { get; set; }
-        public PainKind PainKind { get; set; }
-
+        public string TypeMedicineName { get; set; }
+        public string PainKindName { get; set; }
         public int UserId { get; set; }
-        public User User { get; set; }
-
-        #endregion
     }
 }

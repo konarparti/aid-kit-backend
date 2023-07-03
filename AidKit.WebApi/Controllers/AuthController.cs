@@ -10,6 +10,7 @@ using AidKit.WebApi.ViewModels.Requests.User;
 using AidKit.WebApi.ViewModels.Response.User;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
+using AidKit.DAL.Entities;
 
 namespace AidKit.WebApi.Controllers
 {
