@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using AidKit.Core.Сonstants;
+using AidKit.BLL.DTO.Medicine;
 
 namespace AidKit.WebApi.Controllers
 {
@@ -70,5 +71,37 @@ namespace AidKit.WebApi.Controllers
 
             return Ok(result);
         }
+
+        /// <summary>
+        /// Получить лекарство по Id.
+        /// </summary>
+        /// <param name="id">Id лекарства.</param>
+        /// <response code='200'>Модель лекарства.</response>
+        /// <response code='404'>Лекарство не найдено.</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpGet("GetById/{id:int}")]
+        [Authorize(Roles = UserStringRoles.ALL_USERS)]
+        public async Task<ActionResult<MedicineViewModel>> GetById(int id)
+        {
+            var medicine = await _medicineManager.GetByIdAsync(id);
+
+            MedicineViewModel result =
+            new()
+            {
+                Id = medicine.Id,
+                Name = medicine.Name,
+                Amount = medicine.Amount,
+                PathImage = medicine.PathImage,
+                Available = medicine.Available,
+                Expired = medicine.Expired,
+                PainKindName = medicine.PainKindName,
+                TypeMedicineName = medicine.TypeMedicineName,
+                UserId = id,
+            };
+
+            return Ok(result);
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AidKit.BLL.DTO.Medicine;
 using AidKit.BLL.Interfaces;
+using AidKit.Core.Exceptions;
 using AidKit.DAL;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,7 +42,7 @@ namespace AidKit.BLL.Implementions
 
             if (user == default)
             {
-                throw new InvalidOperationException($"Пользователь с id {id} не найден");
+                throw new NotFoundException($"Пользователь с id {id} не найден");
             }
 
             return await _context.Medicines
@@ -61,6 +62,35 @@ namespace AidKit.BLL.Implementions
                     TypeMedicineName = x.TypeMedicine.Name,
                     UserId = x.UserId,
                 }).ToListAsync();
+        }
+
+        public async Task<MedicineDTO> GetByIdAsync(int id)
+        {
+            var medicine = await _context.Medicines
+                .AsNoTracking()
+                .Include(x => x.PainKind)
+                .Include(x => x.TypeMedicine)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (medicine == null)
+            {
+                throw new NotFoundException($"Лекарство с id {id} не найдено");
+            }
+
+            MedicineDTO medicineDto = new()
+            {
+                Id = medicine.Id,
+                Name = medicine.Name,
+                Amount = medicine.Amount,
+                PathImage = medicine.PathImage,
+                Available = medicine.Available,
+                Expired = medicine.Expired,
+                PainKindName = medicine.PainKind.Name,
+                TypeMedicineName = medicine.TypeMedicine.Name,
+                UserId = medicine.UserId,
+            };
+
+            return medicineDto;
         }
     }
 }

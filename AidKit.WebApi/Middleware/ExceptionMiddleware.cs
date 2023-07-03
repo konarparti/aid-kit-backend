@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Net;
 using System.Security.Authentication;
+using AidKit.Core.Exceptions;
 using Newtonsoft.Json.Serialization;
 using AidKit.Core.ViewModels;
 
@@ -57,6 +58,7 @@ namespace AidKit.WebApi.Middleware
                 FormatException _ => new ErrorCodeResponse(HttpStatusCode.BadRequest, exception.Message),
                 AuthenticationException _ => new ErrorCodeResponse(HttpStatusCode.Forbidden, exception.Message),
                 ArgumentException _ => new ErrorCodeResponse(HttpStatusCode.BadRequest, exception.Message),
+                NotFoundException _ => new ErrorCodeResponse(HttpStatusCode.NotFound, exception.Message),
                 NotImplementedException _ => new ErrorCodeResponse(HttpStatusCode.NotImplemented, "Метод не реализован"),
                 _ => new ErrorCodeResponse(HttpStatusCode.InternalServerError, exception.Message),
             };
