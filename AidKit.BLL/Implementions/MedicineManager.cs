@@ -2,6 +2,7 @@
 using AidKit.BLL.Interfaces;
 using AidKit.Core.Exceptions;
 using AidKit.DAL;
+using AidKit.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace AidKit.BLL.Implementions
@@ -91,6 +92,27 @@ namespace AidKit.BLL.Implementions
             };
 
             return medicineDto;
+        }
+
+        public async Task<int> CreateAsync(MedicineDTO medicineDTO)
+        {
+            var medicine = new Medicine
+            {
+                Name = medicineDTO.Name,
+                Amount = medicineDTO.Amount,
+                PathImage = medicineDTO.PathImage,
+                Available = medicineDTO.Available,
+                Expired = medicineDTO.Expired,
+                PainKindId = medicineDTO.PainKindId,
+                TypeMedicineId = medicineDTO.TypeMedicineId,
+                UserId = medicineDTO.UserId,
+                Created = DateTimeOffset.UtcNow,
+            };
+
+            await _context.AddAsync(medicine);
+            await _context.SaveChangesAsync();
+
+            return medicine.Id;
         }
     }
 }

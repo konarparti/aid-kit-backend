@@ -14,5 +14,7 @@ namespace AidKit.BLL.Interfaces
         Task<IEnumerable<MedicineDTO>> GetAllByUserIdAsync(int id);
 
         Task<MedicineDTO> GetByIdAsync(int id);
+
+        Task<int> CreateAsync(MedicineDTO medicineDTO);
     }
 }

@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using AidKit.Core.Сonstants;
 using AidKit.BLL.DTO.Medicine;
+using AidKit.Service.Interfaces;
+using AidKit.WebApi.ViewModels.Requests.Medicine;
+using Minio;
 
 namespace AidKit.WebApi.Controllers
 {
@@ -14,10 +17,12 @@ namespace AidKit.WebApi.Controllers
     public class MedicineController : ControllerBase
     {
         private readonly IMedicineManager _medicineManager;
+        private readonly IFileStorageService _minioClient;
 
-        public MedicineController(IMedicineManager medicineManager)
+        public MedicineController(IMedicineManager medicineManager, IFileStorageService minioClient)
         {
             _medicineManager = medicineManager;
+            _minioClient = minioClient;
         }
 
         /// <summary>
@@ -101,6 +106,46 @@ namespace AidKit.WebApi.Controllers
             };
 
             return Ok(result);
+        }
+
+        /// <summary>
+        /// Добавить лекарство.
+        /// </summary>
+        /// <param name="newsCreateModel">Модель создания лекарства.</param>
+        /// <response code='200'>Id созданного лекарства.</response>
+        [HttpPost("Create")]
+        [Authorize(Roles = UserStringRoles.ALL_USERS)]
+        public async Task<ActionResult<int>> Create([FromForm] MedicineCreateModel medicineCreateModel)
+        {
+            string? uniqueFileName = null;
+
+            if (medicineCreateModel.ImageFile != null)
+            {
+                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(medicineCreateModel.ImageFile.FileName);
+                var fileExtension = Path.GetExtension(medicineCreateModel.ImageFile.FileName);
+                uniqueFileName = $"{fileNameWithoutExtension}__{Guid.NewGuid()}{fileExtension}";
+
+                await using (var fileStream = medicineCreateModel.ImageFile.OpenReadStream())
+                {
+                    await _minioClient.SaveFileAsync(uniqueFileName, FileStorageServiceConstants.MedicineImageBucketName, fileStream);
+                }
+            }
+
+            var medicineDto = new MedicineDTO
+            {
+                Name = medicineCreateModel.Name,
+                Expired = medicineCreateModel.Expired,
+                Amount = medicineCreateModel.Amount,
+                PathImage = uniqueFileName,
+                Available = medicineCreateModel.Available,
+                PainKindId = medicineCreateModel.PainKindId,
+                TypeMedicineId = medicineCreateModel.TypeMedicineId,
+                UserId = medicineCreateModel.UserId,
+            };
+
+            var id = await _medicineManager.CreateAsync(medicineDto);
+
+            return CreatedAtAction(nameof(Create), id);
         }
 
     }
