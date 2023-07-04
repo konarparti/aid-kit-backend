@@ -100,7 +100,7 @@ namespace AidKit.BLL.Implementions
             {
                 Name = medicineDTO.Name,
                 Amount = medicineDTO.Amount,
-                PathImage = medicineDTO.PathImage ?? "",
+                PathImage = medicineDTO.PathImage,
                 Available = medicineDTO.Available,
                 Expired = medicineDTO.Expired,
                 PainKindId = medicineDTO.PainKindId,
@@ -118,11 +118,11 @@ namespace AidKit.BLL.Implementions
         public async Task UpdateAsync(MedicineDTO medicineDTO)
         {
             var medicine = await _context.Medicines.FirstOrDefaultAsync(n => n.Id == medicineDTO.Id)
-                           ?? throw new NotFoundException("Новость не найдена");
+                           ?? throw new NotFoundException($"Лекарство с id {medicineDTO.Id} не найдено");
 
             medicine.Name = medicineDTO.Name;
             medicine.Amount = medicineDTO.Amount;
-            medicine.PathImage = medicineDTO.PathImage ?? "";
+            medicine.PathImage = medicineDTO.PathImage;
             medicine.Available = medicineDTO.Available;
             medicine.Expired = medicineDTO.Expired;
             medicine.PainKindId = medicineDTO.PainKindId;
@@ -130,6 +130,15 @@ namespace AidKit.BLL.Implementions
             medicine.UserId = medicineDTO.UserId;
             medicine.Updated = DateTimeOffset.UtcNow;
 
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var medicine = await _context.Medicines.FirstOrDefaultAsync(n => n.Id == id)
+                           ?? throw new NotFoundException($"Лекарство с id {id} не найдено");
+
+            _context.Medicines.Remove(medicine);
             await _context.SaveChangesAsync();
         }
     }

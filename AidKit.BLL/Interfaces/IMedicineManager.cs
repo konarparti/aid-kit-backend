@@ -18,5 +18,7 @@ namespace AidKit.BLL.Interfaces
         Task<int> CreateAsync(MedicineDTO medicineDTO);
 
         Task UpdateAsync(MedicineDTO medicineDTO);
+
+        Task DeleteAsync(int id);
     }
 }

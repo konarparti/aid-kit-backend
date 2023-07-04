@@ -9,7 +9,7 @@ namespace AidKit.DAL.Entities
     public class Medicine : BaseEntity
     {
         public string Name { get; set; }
-        public string PathImage { get; set; }
+        public string? PathImage { get; set; }
         public DateTimeOffset Expired { get; set; }
         public int Amount { get; set; }
         public bool Available { get; set; }

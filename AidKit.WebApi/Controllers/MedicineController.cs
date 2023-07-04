@@ -160,8 +160,6 @@ namespace AidKit.WebApi.Controllers
         [Authorize(Roles = UserStringRoles.ALL_USERS)]
         public async Task<IActionResult> Update([FromForm] MedicineUpdateModel medicineUpdateModel)
         {
-            var medicine = await _medicineManager.GetByIdAsync(medicineUpdateModel.Id);
-
             string? uniqueFileName = medicineUpdateModel.ImageFileName;
 
             if (medicineUpdateModel.ImageFile != null)
@@ -194,5 +192,21 @@ namespace AidKit.WebApi.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Удалить данные о лекарстве.
+        /// </summary>
+        /// <param name="id">Id данных.</param>
+        /// <response code='200'>Статус операции.</response>
+        /// <response code='404'>Данные не найдены.</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpDelete("Delete/{id:int}")]
+        [Authorize(Roles = UserStringRoles.ALL_USERS)]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _medicineManager.DeleteAsync(id);
+
+            return Ok();
+        }
     }
 }
