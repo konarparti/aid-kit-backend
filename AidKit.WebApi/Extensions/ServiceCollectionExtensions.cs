@@ -4,6 +4,8 @@ using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 using AidKit.BLL.Implementions;
 using AidKit.BLL.Interfaces;
+using AidKit.Service.Implemetions;
+using AidKit.Service.Interfaces;
 
 namespace AidKit.WebApi.Extensions
 {
@@ -49,6 +51,25 @@ namespace AidKit.WebApi.Extensions
         {
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IMedicineManager, MedicineManager>();
+        }
+
+        public static void ConfigureMinio(this IServiceCollection services, IConfiguration configuration)
+        {
+            var minioConfig = configuration.GetSection("Minio");
+            services.AddScoped<IFileStorageService, MinioFileStorageService>((provider) =>
+            {
+                var endpoint = minioConfig["Endpoint"];
+                var accessKey = minioConfig["AccessKey"];
+                var secretKey = minioConfig["SecretKey"];
+                var useHttps = Convert.ToBoolean(minioConfig["UseHttps"]);
+
+                if (endpoint is null || accessKey is null || secretKey is null)
+                {
+                    throw new ArgumentNullException(nameof(minioConfig), "Одно или несколько значений конфигурации Minio равны null.");
+                }
+
+                return new MinioFileStorageService(endpoint, accessKey, secretKey, useHttps);
+            });
         }
     }
 }

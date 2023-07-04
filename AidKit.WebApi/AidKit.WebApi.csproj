@@ -28,6 +28,7 @@
 	  <ProjectReference Include="..\AidKit.BLL\AidKit.BLL.csproj" />
 	  <ProjectReference Include="..\AidKit.Core\AidKit.Core.csproj" />
 	  <ProjectReference Include="..\AidKit.DAL\AidKit.DAL.csproj" />
+	  <ProjectReference Include="..\AidKit.Service\AidKit.Service.csproj" />
 	</ItemGroup>
 
 </Project>

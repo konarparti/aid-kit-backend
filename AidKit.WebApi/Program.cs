@@ -15,7 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.ConfigureAuthentication();
 builder.Services.ConfigureSwagger();
 builder.Services.AddDbContext<DataContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQL")));
-
+builder.Services.ConfigureMinio(builder.Configuration);
 builder.Services.ConfigureManagers();
 
 builder.Services.AddCors();
