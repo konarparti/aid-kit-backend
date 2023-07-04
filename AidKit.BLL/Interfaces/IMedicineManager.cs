@@ -16,5 +16,7 @@ namespace AidKit.BLL.Interfaces
         Task<MedicineDTO> GetByIdAsync(int id);
 
         Task<int> CreateAsync(MedicineDTO medicineDTO);
+
+        Task UpdateAsync(MedicineDTO medicineDTO);
     }
 }

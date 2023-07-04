@@ -100,7 +100,7 @@ namespace AidKit.BLL.Implementions
             {
                 Name = medicineDTO.Name,
                 Amount = medicineDTO.Amount,
-                PathImage = medicineDTO.PathImage,
+                PathImage = medicineDTO.PathImage ?? "",
                 Available = medicineDTO.Available,
                 Expired = medicineDTO.Expired,
                 PainKindId = medicineDTO.PainKindId,
@@ -113,6 +113,24 @@ namespace AidKit.BLL.Implementions
             await _context.SaveChangesAsync();
 
             return medicine.Id;
+        }
+
+        public async Task UpdateAsync(MedicineDTO medicineDTO)
+        {
+            var medicine = await _context.Medicines.FirstOrDefaultAsync(n => n.Id == medicineDTO.Id)
+                           ?? throw new NotFoundException("Новость не найдена");
+
+            medicine.Name = medicineDTO.Name;
+            medicine.Amount = medicineDTO.Amount;
+            medicine.PathImage = medicineDTO.PathImage ?? "";
+            medicine.Available = medicineDTO.Available;
+            medicine.Expired = medicineDTO.Expired;
+            medicine.PainKindId = medicineDTO.PainKindId;
+            medicine.TypeMedicineId = medicineDTO.TypeMedicineId;
+            medicine.UserId = medicineDTO.UserId;
+            medicine.Updated = DateTimeOffset.UtcNow;
+
+            await _context.SaveChangesAsync();
         }
     }
 }

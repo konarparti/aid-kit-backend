@@ -148,5 +148,51 @@ namespace AidKit.WebApi.Controllers
             return CreatedAtAction(nameof(Create), id);
         }
 
+        /// <summary>
+        /// Изменить данные о лекарстве.
+        /// </summary>
+        /// <param name="medicineUpdateModel">Модель изменения данных.</param>
+        /// <response code='200'>Статус операции.</response>
+        /// <response code='404'>Данные не найдены.</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpPut("Update")]
+        [Authorize(Roles = UserStringRoles.ALL_USERS)]
+        public async Task<IActionResult> Update([FromForm] MedicineUpdateModel medicineUpdateModel)
+        {
+            var medicine = await _medicineManager.GetByIdAsync(medicineUpdateModel.Id);
+
+            string? uniqueFileName = medicineUpdateModel.ImageFileName;
+
+            if (medicineUpdateModel.ImageFile != null)
+            {
+                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(medicineUpdateModel.ImageFile.FileName);
+                var fileExtension = Path.GetExtension(medicineUpdateModel.ImageFile.FileName);
+                uniqueFileName = $"{fileNameWithoutExtension}__{Guid.NewGuid()}{fileExtension}";
+
+                await using (var fileStream = medicineUpdateModel.ImageFile.OpenReadStream())
+                {
+                    await _minioClient.SaveFileAsync(uniqueFileName, FileStorageServiceConstants.MedicineImageBucketName, fileStream);
+                }
+            }
+
+            var medicineDTO = new MedicineDTO
+            {
+                Id = medicineUpdateModel.Id,
+                Name = medicineUpdateModel.Name,
+                Expired = medicineUpdateModel.Expired,
+                Amount = medicineUpdateModel.Amount,
+                PathImage = uniqueFileName,
+                Available = medicineUpdateModel.Available,
+                PainKindId = medicineUpdateModel.PainKindId,
+                TypeMedicineId = medicineUpdateModel.TypeMedicineId,
+                UserId = medicineUpdateModel.UserId,
+            };
+
+            await _medicineManager.UpdateAsync(medicineDTO);
+
+            return Ok();
+        }
+
     }
 }
