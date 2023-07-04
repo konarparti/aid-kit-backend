@@ -111,7 +111,7 @@ namespace AidKit.WebApi.Controllers
         /// <summary>
         /// Добавить лекарство.
         /// </summary>
-        /// <param name="newsCreateModel">Модель создания лекарства.</param>
+        /// <param name="medicineCreateModel">Модель создания лекарства.</param>
         /// <response code='200'>Id созданного лекарства.</response>
         [HttpPost("Create")]
         [Authorize(Roles = UserStringRoles.ALL_USERS)]

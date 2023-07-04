@@ -4,6 +4,7 @@ using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 using AidKit.BLL.Implementions;
 using AidKit.BLL.Interfaces;
+using AidKit.Core.Exceptions;
 using AidKit.Service.Implemetions;
 using AidKit.Service.Interfaces;
 
@@ -29,6 +30,10 @@ namespace AidKit.WebApi.Extensions
                 });
         }
 
+        /// <summary>
+        /// Конфигурация Swagger
+        /// </summary>
+        /// <param name="services">Сервисы</param>
         public static void ConfigureSwagger(this IServiceCollection services)
         {
             services.AddSwaggerGen(options =>
@@ -47,12 +52,23 @@ namespace AidKit.WebApi.Extensions
             });
         }
 
+        /// <summary>
+        /// Конфигурация менеджеров слоя BLL приложения
+        /// </summary>
+        /// <param name="services">Сервисы</param>
         public static void ConfigureManagers(this IServiceCollection services)
         {
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IMedicineManager, MedicineManager>();
         }
 
+        /// <summary>
+        /// Конфигурация объектного хранилища Minio
+        /// </summary>
+        /// <param name="services">Сервисы</param>
+        /// <param name="configuration">Объект конфигурации приложения</param>
+        /// <exception cref="ArgumentNullException">При null значении одного или нескольких параметров конфигурации</exception>
+        /// <exception cref="ServiceConfigException">При пустом значении accessKey и/или secretKey</exception>
         public static void ConfigureMinio(this IServiceCollection services, IConfiguration configuration)
         {
             var minioConfig = configuration.GetSection("Minio");
@@ -66,6 +82,11 @@ namespace AidKit.WebApi.Extensions
                 if (endpoint is null || accessKey is null || secretKey is null)
                 {
                     throw new ArgumentNullException(nameof(minioConfig), "Одно или несколько значений конфигурации Minio равны null.");
+                }
+
+                if (string.IsNullOrWhiteSpace(accessKey) || string.IsNullOrWhiteSpace(secretKey))
+                {
+                    throw new ServiceConfigException("Некоторые данные конфигурации Minio не заполнены");
                 }
 
                 return new MinioFileStorageService(endpoint, accessKey, secretKey, useHttps);

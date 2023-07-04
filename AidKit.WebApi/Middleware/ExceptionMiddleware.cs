@@ -59,6 +59,7 @@ namespace AidKit.WebApi.Middleware
                 AuthenticationException _ => new ErrorCodeResponse(HttpStatusCode.Forbidden, exception.Message),
                 ArgumentException _ => new ErrorCodeResponse(HttpStatusCode.BadRequest, exception.Message),
                 NotFoundException _ => new ErrorCodeResponse(HttpStatusCode.NotFound, exception.Message),
+                ServiceConfigException _ => new ErrorCodeResponse(HttpStatusCode.InternalServerError, exception.Message),
                 NotImplementedException _ => new ErrorCodeResponse(HttpStatusCode.NotImplemented, "Метод не реализован"),
                 _ => new ErrorCodeResponse(HttpStatusCode.InternalServerError, exception.Message),
             };
