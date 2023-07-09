@@ -47,5 +47,29 @@ namespace AidKit.BLL.Implementions
 
             return userDto;
         }
+
+        public async Task<UserDTO?> GetByIdAsync(int id)
+        {
+            var user = await _dataContext.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (user == null)
+                return null;
+
+            var userDto = new UserDTO
+            {
+                Id = user.Id,
+                FullName = user.FullName,
+                Login = user.Login,
+                Email = user.Email,
+                Status = (UserStatusCode)user.Status,
+                UserRoleId = (UserRole)user.UserRoleId,
+                Created = user.Created,
+                Updated = user.Updated,
+            };
+
+            return userDto;
+        }
     }
 }

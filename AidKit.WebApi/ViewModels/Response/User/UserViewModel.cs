@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AidKit.Core.Enums;
+﻿using AidKit.Core.Enums;
 
-namespace AidKit.BLL.DTO.User
+namespace AidKit.WebApi.ViewModels.Response.User
 {
-    public class UserDTO
+    public class UserViewModel
     {
         public int Id { get; set; }
         public string Login { get; set; }
-        public string Password { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
         public UserStatusCode Status { get; set; }

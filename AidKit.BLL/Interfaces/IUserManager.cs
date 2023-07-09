@@ -10,5 +10,7 @@ namespace AidKit.BLL.Interfaces
     public interface IUserManager
     {
         Task<UserDTO?> AuthorizeUser(UserAuthDTO userAuthDto);
+
+        Task<UserDTO?> GetByIdAsync(int id);
     }
 }
