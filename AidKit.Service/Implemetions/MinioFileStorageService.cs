@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AidKit.Core.Exceptions;
 using AidKit.Service.Interfaces;
 using Minio;
 using Minio.Exceptions;
@@ -96,6 +97,37 @@ namespace AidKit.Service.Implemetions
             catch
             {
                 throw new InvalidOperationException("Ошибка при сохранении картинки");
+            }
+        }
+
+        public async Task DeleteFileAsync(string fileName, string filePath)
+        {
+            if (string.IsNullOrWhiteSpace(fileName))
+            {
+                throw new ArgumentException($"\"{nameof(fileName)}\" не может быть пустым или содержать только пробел.", nameof(fileName));
+            }
+
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                throw new ArgumentException($"\"{nameof(filePath)}\" не может быть пустым или содержать только пробел.", nameof(filePath));
+            }
+
+            var isExists = await _minioClient.BucketExistsAsync(filePath);
+
+            if (isExists)
+            {
+                try
+                {
+                    await _minioClient.RemoveObjectAsync(filePath, fileName);
+                }
+                catch
+                {
+                    throw new NotFoundException("Файл по указанному пути не найден");
+                }
+            }
+            else
+            {
+                throw new ArgumentException("Неверно указан путь к файлу");
             }
         }
 

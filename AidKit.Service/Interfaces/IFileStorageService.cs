@@ -23,5 +23,13 @@ namespace AidKit.Service.Interfaces
         /// <param name="filePath">Путь сохранения.</param>
         /// <param name="fileStream">Файл.</param>
         Task SaveFileAsync(string fileName, string filePath, Stream fileStream);
+
+        /// <summary>
+        /// Удалить файл.
+        /// </summary>
+        /// <param name="fileName">Имя файла.</param>
+        /// <param name="filePath">Путь удаления.</param>
+        /// <returns></returns>
+        Task DeleteFileAsync(string fileName, string filePath);
     }
 }

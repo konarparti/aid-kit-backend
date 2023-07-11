@@ -204,6 +204,11 @@ namespace AidKit.WebApi.Controllers
         [Authorize(Roles = UserStringRoles.ALL_USERS)]
         public async Task<IActionResult> Delete(int id)
         {
+            var medicine = await _medicineManager.GetByIdAsync(id);
+            if (!string.IsNullOrWhiteSpace(medicine.PathImage))
+            {
+                await _minioClient.DeleteFileAsync(medicine.PathImage, FileStorageServiceConstants.MedicineImageBucketName);
+            }
             await _medicineManager.DeleteAsync(id);
 
             return Ok();
