@@ -92,5 +92,30 @@ namespace AidKit.WebApi.Controllers
 
             return Ok();
         }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost, Route("Register")]
+        public async Task<ActionResult<UserAuthModel>> Register(UserRegisterModel userRegisterModel)
+        {
+            var userRegisterDTO = new UserRegisterDTO
+            {
+                Login = userRegisterModel.Login,
+                Password = userRegisterModel.Password,
+                Name = userRegisterModel.FullName,
+                Email = userRegisterModel.Email,
+            };
+
+            var isLoginFree = await _userManager.CheckLoginAsync(userRegisterDTO.Login);
+
+            if (!isLoginFree)
+            {
+                return BadRequest(new { message = $"Логин {userRegisterDTO.Login} уже занят" });
+            }
+
+            await _userManager.RegisterUserAsync(userRegisterDTO);
+
+            return Ok();
+        }
     }
 }

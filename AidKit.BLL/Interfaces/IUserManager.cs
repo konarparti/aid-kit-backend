@@ -12,5 +12,9 @@ namespace AidKit.BLL.Interfaces
         Task<UserDTO?> AuthorizeUser(UserAuthDTO userAuthDto);
 
         Task<UserDTO?> GetByIdAsync(int id);
+
+        Task<bool> CheckLoginAsync(string login);
+
+        Task RegisterUserAsync(UserRegisterDTO userRegisterDTO);
     }
 }

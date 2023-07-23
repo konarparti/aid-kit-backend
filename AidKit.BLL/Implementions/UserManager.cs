@@ -4,6 +4,8 @@ using AidKit.BLL.DTO.User;
 using AidKit.BLL.Interfaces;
 using AidKit.Core.Enums;
 using AidKit.DAL;
+using AidKit.DAL.Entities;
+using UserRole = AidKit.Core.Enums.UserRole;
 
 namespace AidKit.BLL.Implementions
 {
@@ -70,6 +72,33 @@ namespace AidKit.BLL.Implementions
             };
 
             return userDto;
+        }
+
+        public async Task<bool> CheckLoginAsync(string login)
+        {
+            var user = await _dataContext.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(user => user.Login == login);
+
+            return user is null;
+        }
+
+        public async Task RegisterUserAsync(UserRegisterDTO userRegisterDTO)
+        {
+            var user = new User
+            {
+                Login = userRegisterDTO.Login,
+                Password = BCrypt.Net.BCrypt.HashPassword(userRegisterDTO.Password),
+                Created = DateTimeOffset.UtcNow,
+                Email = userRegisterDTO.Email,
+                FullName = userRegisterDTO.Name,
+                Status = (int)UserStatusCode.Active,
+                UserRoleId = (int)UserRole.User,
+                ProfileImage = "",
+            };
+
+            await _dataContext.Users.AddAsync(user);
+            await _dataContext.SaveChangesAsync();
         }
     }
 }
