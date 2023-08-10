@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AidKit.DAL", "AidKit.DAL\Ai
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AidKit.Service", "AidKit.Service\AidKit.Service.csproj", "{29F329E3-2283-49E6-8947-780739EF8484}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AidKit.Tests", "AidKit.Tests\AidKit.Tests.csproj", "{C9860213-0508-451D-B0B8-C4BA6763CFE9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{29F329E3-2283-49E6-8947-780739EF8484}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29F329E3-2283-49E6-8947-780739EF8484}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29F329E3-2283-49E6-8947-780739EF8484}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9860213-0508-451D-B0B8-C4BA6763CFE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9860213-0508-451D-B0B8-C4BA6763CFE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9860213-0508-451D-B0B8-C4BA6763CFE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9860213-0508-451D-B0B8-C4BA6763CFE9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
